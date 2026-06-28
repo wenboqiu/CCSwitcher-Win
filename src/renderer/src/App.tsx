@@ -30,7 +30,11 @@ export default function App() {
   useEffect(() => {
     loadAll();
     const unsub = window.electronAPI.onStateUpdated((s) => setState(s));
-    return unsub;
+    window.addEventListener('focus', loadAll);
+    return () => {
+      unsub();
+      window.removeEventListener('focus', loadAll);
+    };
   }, [loadAll]);
 
   // Keep the window height matched to the content as it changes (e.g. when cost
