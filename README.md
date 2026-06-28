@@ -2,6 +2,8 @@
 
 A Windows system-tray app for switching between multiple [Claude Code](https://claude.ai/code) accounts without logging out each time.
 
+![CCSwitcher screenshot](docs/screenshot.png)
+
 ## Features
 
 - **Account switching** — swap Claude Code credentials in one click; no manual `claude auth logout / login` cycle
