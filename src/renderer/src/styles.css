@@ -1,0 +1,261 @@
+/* ── Design tokens ──────────────────────────────────────────────────────────── */
+:root {
+  --bg: #1c1c1e;
+  --bg-2: #2c2c2e;
+  --bg-3: #3a3a3c;
+  --text: #ffffff;
+  --text-2: #ebebf599;
+  --text-3: #ebebf54d;
+  --accent: #0a84ff;
+  --danger: #ff453a;
+  --warning: #ff9f0a;
+  --success: #30d158;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f2f2f7;
+    --bg-2: #ffffff;
+    --bg-3: #e5e5ea;
+    --text: #000000;
+    --text-2: #3c3c4399;
+    --text-3: #3c3c434d;
+    --accent: #007aff;
+    --danger: #ff3b30;
+    --warning: #ff9500;
+    --success: #34c759;
+  }
+}
+
+/* ── Reset ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* the popup window is fixed-size; never scroll the viewport */
+}
+
+body {
+  font-family: -apple-system, 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { height: 100%; }
+
+/* Hide scrollbars everywhere (still scrollable by wheel/trackpad). */
+*::-webkit-scrollbar { width: 0; height: 0; display: none; }
+* { scrollbar-width: none; }
+
+/* ── App shell ──────────────────────────────────────────────────────────────── */
+.app {
+  width: 100vw;
+  height: auto;
+  max-height: 100vh;   /* window auto-sizes to content; cap so it never exceeds the screen */
+  overflow-y: auto;    /* only scrolls in the rare case content is taller than the screen */
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--bg-3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .45);
+}
+
+/* Unconstrained inner wrapper — its height is the true content height we measure. */
+.app-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 10px 16px;
+  border-bottom: 1px solid var(--bg-3);
+  -webkit-app-region: drag;
+}
+
+.app-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--text);
+}
+
+.close-btn {
+  -webkit-app-region: no-drag;
+  background: none;
+  border: none;
+  color: var(--text-2);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 4px;
+  transition: color .15s, background .15s;
+}
+.close-btn:hover { color: var(--text); background: var(--bg-3); }
+
+/* ── Error / busy ───────────────────────────────────────────────────────────── */
+.error-banner {
+  background: color-mix(in srgb, var(--danger) 15%, var(--bg));
+  color: var(--danger);
+  font-size: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--bg-3);
+}
+
+.busy-bar {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1s linear infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Body ───────────────────────────────────────────────────────────────────── */
+.app-body { display: flex; flex-direction: column; }
+
+/* ── Section ────────────────────────────────────────────────────────────────── */
+.section { padding: 10px 0; border-bottom: 1px solid var(--bg-3); }
+.section:last-child { border-bottom: none; }
+
+.section-header {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-2);
+  padding: 0 16px 6px;
+}
+
+.empty-hint { color: var(--text-3); padding: 4px 16px; font-size: 12px; }
+
+/* ── Account rows ───────────────────────────────────────────────────────────── */
+.account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 8px 16px;
+  gap: 8px;
+  border-radius: var(--radius-sm);
+  margin: 0 4px;
+  transition: background .12s;
+}
+.account-row:hover { background: var(--bg-2); }
+.account-row.active { background: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
+
+.account-info { display: flex; align-items: center; gap: 8px; min-width: 0; }
+
+.account-email {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.account-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+.active-label { font-size: 11px; color: var(--success); font-weight: 600; }
+
+/* ── Badges ─────────────────────────────────────────────────────────────────── */
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: var(--bg-3);
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.badge-pro    { background: color-mix(in srgb, var(--accent) 20%, var(--bg-3)); color: var(--accent); }
+.badge-max    { background: color-mix(in srgb, var(--success) 20%, var(--bg-3)); color: var(--success); }
+
+/* ── Buttons ────────────────────────────────────────────────────────────────── */
+button { cursor: pointer; font-family: inherit; }
+
+.btn {
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  transition: opacity .15s, background .15s;
+}
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover:not(:disabled) { opacity: .85; }
+
+.btn-ghost {
+  background: var(--bg-3);
+  color: var(--text-2);
+  padding: 4px 7px;
+}
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: color-mix(in srgb, var(--bg-3) 80%, var(--text)); }
+
+.btn-danger {
+  background: none;
+  color: var(--danger);
+  padding: 4px 6px;
+  opacity: .7;
+}
+.btn-danger:hover:not(:disabled) { opacity: 1; background: color-mix(in srgb, var(--danger) 12%, transparent); }
+
+.btn-add {
+  background: none;
+  color: var(--accent);
+  font-size: 13px;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: left;
+  border-radius: 0;
+  margin-top: 2px;
+}
+.btn-add:hover:not(:disabled) { background: var(--bg-2); }
+
+/* ── Usage: limit bars ──────────────────────────────────────────────────────── */
+.limits-row { display: flex; flex-direction: column; gap: 6px; padding: 0 16px 8px; }
+
+.limit-bar-wrap { display: flex; flex-direction: column; gap: 3px; }
+.limit-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-2); }
+.reset-hint { color: var(--text-3); }
+.limit-bar-track { height: 4px; background: var(--bg-3); border-radius: 2px; overflow: hidden; }
+.limit-bar-fill  { height: 100%; border-radius: 2px; transition: width .3s; }
+
+/* ── Usage: stats grid ──────────────────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--bg-3);
+  border-top: 1px solid var(--bg-3);
+}
+
+.cost-grid {
+  margin-top: 8px;
+}
+
+.stat-cell {
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px;
+  gap: 2px;
+}
+
+.stat-value { font-size: 18px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 10px; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; }
